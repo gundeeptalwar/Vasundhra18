@@ -1,130 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <meta name="color-scheme" content="light only"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>MUSE — AI Mood Board</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Josefin+Sans:wght@100;300;400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --cream: #F5F0E8; --warm-white: #FAF7F2; --ink: #1A1410;
-    --taupe: #B8A898; --gold: #C9A96E; --blush: #E8D5C4; --charcoal: #2D2520;
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { color-scheme: light; background:#F5F0E8 !important; color:var(--ink); font-family:'Josefin Sans',sans-serif; font-weight:300; min-height:100vh; overflow-x:hidden; }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes grow { from{height:0} to{height:60px} }
-  @keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
-  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-  @keyframes widen { from{width:0} to{width:60px} }
-  @keyframes tagIn { from{opacity:0;transform:scale(.9)} to{opacity:1;transform:scale(1)} }
+  :root { --cream:#F5F0E8;--warm:#FAF7F2;--ink:#1A1410;--taupe:#B8A898;--gold:#C9A96E;--blush:#E8D5C4;--charcoal:#2D2520; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--cream)!important;color:var(--ink);font-family:'Josefin Sans',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden;color-scheme:light;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes grow{from{height:0}to{height:60px}}
+  @keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  @keyframes widen{from{width:0}to{width:60px}}
+  @keyframes tagIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
 
   /* SPLASH */
-  #splash { position:fixed; inset:0; z-index:9999; background:#1A1410; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:40px; cursor:pointer; }
-  .s-pre { font-family:'Josefin Sans',sans-serif; font-size:clamp(10px,1.5vw,13px); letter-spacing:.6em; text-transform:uppercase; color:#C9A96E; margin-bottom:32px; animation:fadeUp 1s ease .2s both; }
-  .s-num { font-family:'Cormorant Garamond',serif; font-size:clamp(52px,12vw,110px); font-weight:300; color:#FAF7F2; line-height:1; animation:fadeUp 1s ease .5s both; }
-  .s-days { font-family:'Josefin Sans',sans-serif; font-size:clamp(9px,1.2vw,11px); letter-spacing:.55em; text-transform:uppercase; color:#B8A898; margin-top:12px; animation:fadeUp 1s ease .7s both; }
-  .s-name { font-family:'Playfair Display',serif; font-size:clamp(32px,7vw,64px); font-style:italic; color:#FAF7F2; margin-top:40px; animation:fadeUp 1s ease .9s both; }
-  .s-rule { width:60px; height:1px; background:#C9A96E; margin:32px auto; animation:widen 1s ease 1.1s both; }
-  .s-msg { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(15px,2vw,19px); color:#B8A898; max-width:420px; line-height:1.7; animation:fadeUp 1s ease 1.2s both; }
-  .s-tap { margin-top:52px; font-family:'Josefin Sans',sans-serif; font-size:9px; letter-spacing:.5em; text-transform:uppercase; color:#C9A96E; opacity:.7; animation:fadeUp 1s ease 1.5s both; }
+  #splash{position:fixed;inset:0;z-index:9999;background:#1A1410;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;cursor:pointer;}
+  .s-pre{font-size:clamp(10px,1.5vw,13px);letter-spacing:.6em;text-transform:uppercase;color:#C9A96E;margin-bottom:32px;animation:fadeUp 1s ease .2s both;}
+  .s-num{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,12vw,110px);font-weight:300;color:#FAF7F2;line-height:1;animation:fadeUp 1s ease .5s both;}
+  .s-days{font-size:clamp(9px,1.2vw,11px);letter-spacing:.55em;text-transform:uppercase;color:#B8A898;margin-top:12px;animation:fadeUp 1s ease .7s both;}
+  .s-name{font-family:'Playfair Display',serif;font-size:clamp(32px,7vw,64px);font-style:italic;color:#FAF7F2;margin-top:40px;animation:fadeUp 1s ease .9s both;}
+  .s-rule{width:60px;height:1px;background:#C9A96E;margin:32px auto;animation:widen 1s ease 1.1s both;}
+  .s-msg{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(15px,2vw,19px);color:#B8A898;max-width:420px;line-height:1.7;animation:fadeUp 1s ease 1.2s both;}
+  .s-tap{margin-top:52px;font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:#C9A96E;opacity:.7;animation:fadeUp 1s ease 1.5s both;}
 
-  /* API KEY SCREEN */
-  #keyScreen { position:fixed; inset:0; z-index:9998; background:rgba(245,240,232,.97); display:none; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:40px; }
-  .k-logo { font-family:'Cormorant Garamond',serif; font-size:32px; letter-spacing:.3em; color:var(--ink); margin-bottom:40px; }
-  .k-title { font-family:'Playfair Display',serif; font-size:clamp(22px,4vw,32px); margin-bottom:12px; }
-  .k-sub { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:16px; color:var(--taupe); max-width:440px; line-height:1.6; margin-bottom:36px; }
-  .k-input { width:100%; max-width:480px; background:transparent; border:none; border-bottom:1px solid var(--ink); padding:14px 0; font-family:'Josefin Sans',sans-serif; font-size:14px; color:var(--ink); outline:none; letter-spacing:.05em; text-align:center; }
-  .k-input::placeholder { color:var(--taupe); }
-  .k-input:focus { border-bottom-color:var(--gold); }
-  .k-err { display:none; color:#c0392b; font-size:11px; letter-spacing:.2em; margin-top:10px; }
-  .k-hint { font-size:9px; letter-spacing:.3em; color:var(--taupe); text-transform:uppercase; margin-top:12px; }
-  .k-hint a { color:var(--gold); text-decoration:none; }
-  .k-btn { margin-top:30px; padding:14px 44px; background:var(--ink); color:var(--cream); font-family:'Josefin Sans',sans-serif; font-size:10px; letter-spacing:.5em; text-transform:uppercase; border:none; cursor:pointer; }
-  .k-btn:hover { background:var(--charcoal); }
+  /* KEY SCREEN */
+  #keyScreen{position:fixed;inset:0;z-index:9998;background:var(--cream);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;}
+  .k-logo{font-family:'Cormorant Garamond',serif;font-size:36px;letter-spacing:.3em;color:var(--ink);margin-bottom:8px;}
+  .k-sub{font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:var(--taupe);margin-bottom:48px;}
+  .k-title{font-family:'Playfair Display',serif;font-size:clamp(20px,3vw,28px);margin-bottom:12px;}
+  .k-desc{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--taupe);max-width:400px;line-height:1.7;margin-bottom:36px;}
+  .k-input{width:100%;max-width:460px;background:var(--cream)!important;border:none;border-bottom:1px solid var(--ink);padding:14px 0;font-family:'Josefin Sans',sans-serif;font-size:14px;color:var(--ink)!important;outline:none;text-align:center;letter-spacing:.05em;}
+  .k-input::placeholder{color:var(--taupe);}
+  .k-input:focus{border-bottom-color:var(--gold);}
+  .k-err{display:none;color:#c0392b;font-size:11px;letter-spacing:.2em;margin-top:10px;}
+  .k-btn{margin-top:32px;padding:14px 48px;background:var(--ink);color:var(--cream);font-family:'Josefin Sans',sans-serif;font-size:10px;letter-spacing:.5em;text-transform:uppercase;border:none;cursor:pointer;}
+  .k-note{margin-top:20px;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--taupe);}
 
   /* HEADER */
-  header { display:flex; flex-direction:column; align-items:center; padding:60px 40px 40px; }
-  .header-rule { width:1px; height:60px; background:var(--gold); margin-bottom:20px; animation:grow 1s ease forwards; }
-  .logo { font-family:'Cormorant Garamond',serif; font-size:clamp(52px,10vw,96px); font-weight:300; letter-spacing:.3em; line-height:1; animation:fadeUp 1s ease .2s both; }
-  .tagline { font-size:10px; letter-spacing:.5em; color:var(--taupe); text-transform:uppercase; margin-top:8px; animation:fadeUp 1s ease .4s both; }
+  header{display:flex;flex-direction:column;align-items:center;padding:60px 40px 40px;}
+  .header-rule{width:1px;height:60px;background:var(--gold);margin-bottom:20px;animation:grow 1s ease forwards;}
+  .logo{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,10vw,96px);font-weight:300;letter-spacing:.3em;line-height:1;animation:fadeUp 1s ease .2s both;}
+  .tagline{font-size:10px;letter-spacing:.5em;color:var(--taupe);text-transform:uppercase;margin-top:8px;animation:fadeUp 1s ease .4s both;}
 
-  .intro { text-align:center; padding:20px 40px 50px; animation:fadeUp 1s ease .6s both; }
-  .intro p { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(16px,2.5vw,22px); color:var(--charcoal); max-width:560px; margin:0 auto; line-height:1.6; opacity:.8; }
+  .intro{text-align:center;padding:20px 40px 50px;animation:fadeUp 1s ease .6s both;}
+  .intro p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(16px,2.5vw,22px);color:var(--charcoal);max-width:560px;margin:0 auto;line-height:1.6;opacity:.8;}
 
   /* INPUT */
-  .input-section { max-width:700px; margin:0 auto; padding:0 40px 60px; animation:fadeUp 1s ease .8s both; }
-  .input-label { display:block; font-size:9px; letter-spacing:.4em; text-transform:uppercase; color:var(--taupe); margin-bottom:14px; }
-  .vibe-input { width:100%; background:#F5F0E8 !important; border:none; border-bottom:1px solid #1A1410; padding:14px 0; font-family:'Cormorant Garamond',serif; font-size:clamp(20px,3vw,28px); color:#1A1410 !important; outline:none; transition:border-color .3s; }
-  .vibe-input::placeholder { color:var(--taupe); font-style:italic; }
-  .vibe-input:focus { border-bottom-color:var(--gold); }
-  .pills { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
-  .pill { padding:6px 16px; border:1px solid var(--taupe); font-size:9px; letter-spacing:.3em; text-transform:uppercase; color:var(--taupe); cursor:pointer; transition:all .25s; background:transparent; }
-  .pill:hover { border-color:var(--ink); color:var(--ink); }
-  .generate-btn { display:block; margin:36px auto 0; padding:16px 48px; background:var(--ink); color:var(--cream); font-family:'Josefin Sans',sans-serif; font-size:10px; letter-spacing:.5em; text-transform:uppercase; border:none; cursor:pointer; position:relative; overflow:hidden; transition:all .3s; }
-  .generate-btn::after { content:''; position:absolute; inset:0; background:var(--gold); transform:translateX(-100%); transition:transform .4s ease; z-index:0; }
-  .generate-btn:hover::after { transform:translateX(0); }
-  .generate-btn span { position:relative; z-index:1; }
-  .generate-btn:disabled { opacity:.5; cursor:not-allowed; }
+  .input-section{max-width:700px;margin:0 auto;padding:0 40px 60px;animation:fadeUp 1s ease .8s both;}
+  .input-label{display:block;font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:var(--taupe);margin-bottom:14px;}
+  .vibe-input{width:100%;background:var(--cream)!important;border:none;border-bottom:1px solid var(--ink);padding:14px 0;font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3vw,28px);color:var(--ink)!important;outline:none;transition:border-color .3s;}
+  .vibe-input::placeholder{color:var(--taupe);font-style:italic;}
+  .vibe-input:focus{border-bottom-color:var(--gold);}
+  .pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;}
+  .pill{padding:6px 16px;border:1px solid var(--taupe);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--taupe);cursor:pointer;transition:all .25s;background:transparent;}
+  .pill:hover{border-color:var(--ink);color:var(--ink);}
+  .gen-btn{display:block;margin:36px auto 0;padding:16px 48px;background:var(--ink);color:var(--cream);font-family:'Josefin Sans',sans-serif;font-size:10px;letter-spacing:.5em;text-transform:uppercase;border:none;cursor:pointer;position:relative;overflow:hidden;transition:all .3s;}
+  .gen-btn:disabled{opacity:.5;cursor:not-allowed;}
 
   /* LOADING */
-  .loading { display:none; text-align:center; padding:60px 40px; }
-  .loading.active { display:block; }
-  .loading-text { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:18px; color:var(--taupe); animation:pulse 1.5s ease-in-out infinite; }
-  .loading-dots { display:flex; justify-content:center; gap:8px; margin-top:20px; }
-  .dot { width:5px; height:5px; background:var(--gold); border-radius:50%; animation:bounce 1.2s ease-in-out infinite; }
-  .dot:nth-child(2){animation-delay:.2s} .dot:nth-child(3){animation-delay:.4s}
+  .loading{display:none;text-align:center;padding:60px 40px;}
+  .loading.active{display:block;}
+  .loading-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--taupe);animation:pulse 1.5s ease-in-out infinite;}
+  .loading-dots{display:flex;justify-content:center;gap:8px;margin-top:20px;}
+  .dot{width:5px;height:5px;background:var(--gold);border-radius:50%;animation:bounce 1.2s ease-in-out infinite;}
+  .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
 
   /* MOODBOARD */
-  .moodboard { display:none; max-width:1000px; margin:0 auto; padding:20px 40px 80px; }
-  .moodboard.active { display:block; animation:fadeUp .8s ease both; }
-  .mb-header { border-top:1px solid var(--ink); border-bottom:1px solid var(--taupe); padding:16px 0; display:flex; justify-content:space-between; align-items:baseline; margin-bottom:48px; }
-  .mb-issue { font-size:8px; letter-spacing:.5em; text-transform:uppercase; color:var(--taupe); }
-  .mb-title { font-family:'Cormorant Garamond',serif; font-size:clamp(22px,4vw,36px); font-weight:400; letter-spacing:.05em; }
-  .mb-date { font-size:8px; letter-spacing:.3em; color:var(--taupe); text-transform:uppercase; }
-  .mb-grid { display:grid; grid-template-columns:1fr 1fr; gap:40px; }
-  .card-poem { grid-column:1/-1; background:var(--ink); color:var(--cream); padding:50px 56px; position:relative; overflow:hidden; }
-  .card-poem::before { content:'"'; position:absolute; top:-20px; left:30px; font-family:'Cormorant Garamond',serif; font-size:200px; color:rgba(201,169,110,.15); line-height:1; pointer-events:none; }
-  .poem-label { font-size:8px; letter-spacing:.5em; text-transform:uppercase; color:var(--gold); margin-bottom:20px; display:block; }
-  .poem-text { font-family:'Cormorant Garamond',serif; font-size:clamp(18px,2.5vw,26px); font-style:italic; line-height:1.7; font-weight:300; position:relative; z-index:1; }
-  .card-palette { background:var(--warm-white); padding:36px; }
-  .card-label { font-size:8px; letter-spacing:.5em; text-transform:uppercase; color:var(--taupe); margin-bottom:24px; display:block; }
-  .swatches { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:8px; }
-  .swatch-wrap { flex:1; min-width:50px; }
-  .swatch { height:80px; border:1px solid rgba(0,0,0,.08); cursor:pointer; transition:transform .2s; }
-  .swatch:hover { transform:scaleY(1.05); }
-  .swatch-name { font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:var(--charcoal); margin-top:8px; text-align:center; opacity:.7; }
-  .card-dna { background:var(--blush); padding:36px; display:flex; flex-direction:column; justify-content:space-between; }
-  .dna-persona { font-family:'Playfair Display',serif; font-size:clamp(26px,4vw,38px); font-weight:700; line-height:1.1; margin-bottom:20px; }
-  .dna-desc { font-family:'Cormorant Garamond',serif; font-size:16px; line-height:1.6; color:var(--charcoal); opacity:.85; }
-  .card-keywords { grid-column:1/-1; padding:36px; border:1px solid var(--taupe); }
-  .keywords-wrap { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
-  .keyword-tag { padding:8px 20px; border:1px solid var(--ink); font-size:9px; letter-spacing:.4em; text-transform:uppercase; transition:all .25s; cursor:default; animation:tagIn .4s ease both; }
-  .keyword-tag:hover { background:var(--ink); color:var(--cream); }
-  .card-outfit { grid-column:1/-1; display:grid; grid-template-columns:repeat(3,1fr); border:1px solid var(--ink); overflow:hidden; }
-  .outfit-item { padding:32px 28px; border-right:1px solid var(--taupe); }
-  .outfit-item:last-child { border-right:none; }
-  .outfit-num { font-family:'Cormorant Garamond',serif; font-size:48px; font-weight:300; color:var(--taupe); opacity:.4; line-height:1; margin-bottom:12px; }
-  .outfit-title { font-family:'Playfair Display',serif; font-size:14px; font-weight:400; margin-bottom:10px; letter-spacing:.05em; }
-  .outfit-desc { font-family:'Cormorant Garamond',serif; font-size:15px; line-height:1.6; color:var(--charcoal); opacity:.8; }
-  .inspo-line { grid-column:1/-1; text-align:center; padding:30px; border-top:1px solid var(--taupe); }
-  .inspo-quote { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(16px,2.5vw,22px); color:var(--taupe); letter-spacing:.03em; }
-  .reset-btn { display:block; margin:40px auto 20px; background:transparent; border:1px solid var(--taupe); padding:12px 36px; font-family:'Josefin Sans',sans-serif; font-size:9px; letter-spacing:.4em; text-transform:uppercase; color:var(--taupe); cursor:pointer; transition:all .3s; }
-  .reset-btn:hover { border-color:var(--ink); color:var(--ink); }
+  .moodboard{display:none;max-width:1000px;margin:0 auto;padding:20px 40px 80px;}
+  .moodboard.active{display:block;animation:fadeUp .8s ease both;}
+  .mb-header{border-top:1px solid var(--ink);border-bottom:1px solid var(--taupe);padding:16px 0;display:flex;justify-content:space-between;align-items:baseline;margin-bottom:48px;flex-wrap:wrap;gap:8px;}
+  .mb-issue{font-size:8px;letter-spacing:.5em;text-transform:uppercase;color:var(--taupe);}
+  .mb-title{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,4vw,36px);font-weight:400;letter-spacing:.05em;}
+  .mb-date{font-size:8px;letter-spacing:.3em;color:var(--taupe);text-transform:uppercase;}
+  .mb-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+  .card-poem{grid-column:1/-1;background:var(--ink);color:var(--cream);padding:50px 56px;position:relative;overflow:hidden;}
+  .card-poem::before{content:'"';position:absolute;top:-20px;left:30px;font-family:'Cormorant Garamond',serif;font-size:200px;color:rgba(201,169,110,.15);line-height:1;pointer-events:none;}
+  .poem-label{font-size:8px;letter-spacing:.5em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:block;}
+  .poem-text{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,2.5vw,26px);font-style:italic;line-height:1.7;font-weight:300;position:relative;z-index:1;}
+  .card-palette{background:var(--warm);padding:36px;}
+  .card-label{font-size:8px;letter-spacing:.5em;text-transform:uppercase;color:var(--taupe);margin-bottom:24px;display:block;}
+  .swatches{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+  .swatch-wrap{flex:1;min-width:50px;}
+  .swatch{height:80px;border:1px solid rgba(0,0,0,.08);cursor:pointer;transition:transform .2s;}
+  .swatch:hover{transform:scaleY(1.05);}
+  .swatch-name{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--charcoal);margin-top:8px;text-align:center;opacity:.7;}
+  .card-dna{background:var(--blush);padding:36px;display:flex;flex-direction:column;justify-content:space-between;}
+  .dna-persona{font-family:'Playfair Display',serif;font-size:clamp(26px,4vw,38px);font-weight:700;line-height:1.1;margin-bottom:20px;}
+  .dna-desc{font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.6;color:var(--charcoal);opacity:.85;}
+  .card-keywords{grid-column:1/-1;padding:36px;border:1px solid var(--taupe);}
+  .keywords-wrap{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;}
+  .keyword-tag{padding:8px 20px;border:1px solid var(--ink);font-size:9px;letter-spacing:.4em;text-transform:uppercase;transition:all .25s;cursor:default;animation:tagIn .4s ease both;}
+  .keyword-tag:hover{background:var(--ink);color:var(--cream);}
+  .card-outfit{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--ink);overflow:hidden;}
+  .outfit-item{padding:32px 28px;border-right:1px solid var(--taupe);}
+  .outfit-item:last-child{border-right:none;}
+  .outfit-num{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:var(--taupe);opacity:.4;line-height:1;margin-bottom:12px;}
+  .outfit-title{font-family:'Playfair Display',serif;font-size:14px;font-weight:400;margin-bottom:10px;letter-spacing:.05em;}
+  .outfit-desc{font-family:'Cormorant Garamond',serif;font-size:15px;line-height:1.6;color:var(--charcoal);opacity:.8;}
+  .inspo-line{grid-column:1/-1;text-align:center;padding:30px;border-top:1px solid var(--taupe);}
+  .inspo-quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(16px,2.5vw,22px);color:var(--taupe);letter-spacing:.03em;}
+  .reset-btn{display:block;margin:40px auto 20px;background:transparent;border:1px solid var(--taupe);padding:12px 36px;font-family:'Josefin Sans',sans-serif;font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:var(--taupe);cursor:pointer;transition:all .3s;}
+  .reset-btn:hover{border-color:var(--ink);color:var(--ink);}
 
-  footer { text-align:center; padding:40px; border-top:1px solid rgba(184,168,152,.3); }
-  .footer-text { font-size:8px; letter-spacing:.5em; text-transform:uppercase; color:var(--taupe); }
-  .footer-heart { color:var(--gold); font-size:12px; }
+  footer{text-align:center;padding:40px;border-top:1px solid rgba(184,168,152,.3);}
+  .footer-text{font-size:8px;letter-spacing:.5em;text-transform:uppercase;color:var(--taupe);}
 
-  @media(max-width:640px) {
-    .mb-grid,.card-outfit { grid-template-columns:1fr; }
-    .card-poem,.card-keywords { grid-column:1; }
-    .outfit-item { border-right:none; border-bottom:1px solid var(--taupe); }
-    .outfit-item:last-child { border-bottom:none; }
-    .card-poem { padding:36px 28px; }
-    header,.input-section,.moodboard { padding-left:20px; padding-right:20px; }
-    .mb-header { flex-direction:column; gap:6px; }
+  @media(max-width:640px){
+    .mb-grid,.card-outfit{grid-template-columns:1fr;}
+    .card-poem,.card-keywords{grid-column:1;}
+    .outfit-item{border-right:none;border-bottom:1px solid var(--taupe);}
+    .outfit-item:last-child{border-bottom:none;}
+    .card-poem{padding:36px 28px;}
+    header,.input-section,.moodboard{padding-left:20px;padding-right:20px;}
+    .mb-header{flex-direction:column;gap:6px;}
   }
 </style>
 </head>
@@ -141,6 +133,18 @@
   <div class="s-tap">tap anywhere to enter</div>
 </div>
 
+<!-- KEY SCREEN -->
+<div id="keyScreen">
+  <div class="k-logo">MUSE</div>
+  <div class="k-sub">Your AI Fashion Editor</div>
+  <div class="k-title">One quick step ✨</div>
+  <div class="k-desc">Paste the secret key shared with you to unlock your personal fashion editor.</div>
+  <input class="k-input" id="keyInput" type="password" placeholder="sk-ant-api03-…" autocomplete="off"/>
+  <div class="k-err" id="keyErr">Invalid key — please check and try again</div>
+  <button class="k-btn" onclick="saveKey()">Enter MUSE →</button>
+  <div class="k-note">Your key is saved only in your browser 🔒</div>
+</div>
+
 <header>
   <div class="header-rule"></div>
   <div class="logo">MUSE</div>
@@ -152,7 +156,7 @@
 </section>
 
 <section class="input-section">
-  <label class="input-label">your vibe, occasion, or aesthetic</label>
+  <label class="input-label">Your vibe, occasion, or aesthetic</label>
   <input class="vibe-input" id="vibeInput" type="text" placeholder="e.g. golden hour rooftop dinner in Paris…" maxlength="200"/>
   <div class="pills">
     <div class="pill" onclick="setVibe('rainy day café, soft and moody')">Rainy Day Café</div>
@@ -162,7 +166,7 @@
     <div class="pill" onclick="setVibe('business power meeting, sharp and confident')">Power Meeting</div>
     <div class="pill" onclick="setVibe('birthday celebration dinner, luxurious and festive')">Birthday Dinner</div>
   </div>
-  <button class="generate-btn" id="generateBtn" onclick="generateBoard()"><span>Generate Mood Board</span></button>
+  <button class="gen-btn" id="generateBtn" onclick="generateBoard()"><span>Generate Mood Board</span></button>
 </section>
 
 <div class="loading" id="loading">
@@ -173,32 +177,54 @@
 <section class="moodboard" id="moodboard"></section>
 
 <footer>
-  <div class="footer-text">Made with <span class="footer-heart">♥</span> &nbsp;·&nbsp; MUSE — AI Fashion Editor &nbsp;·&nbsp; Happy Birthday 🎂</div>
+  <div class="footer-text">Made with <span style="color:var(--gold)">♥</span> &nbsp;·&nbsp; MUSE — AI Fashion Editor &nbsp;·&nbsp; Happy Birthday 🎂</div>
 </footer>
 
 <script>
-  var API_KEY = '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';
+  var API_KEY = localStorage.getItem('muse_key') || null;
 
-  // Splash dismiss
-  document.getElementById('splash').addEventListener('click', function () {
+  // SPLASH
+  document.getElementById('splash').addEventListener('click', function(){
     var el = this;
     el.style.transition = 'opacity 0.8s ease';
     el.style.opacity = '0';
-    setTimeout(function(){ el.style.display = 'none'; }, 800);
+    setTimeout(function(){
+      el.style.display = 'none';
+      if (!API_KEY) showKeyScreen();
+    }, 800);
   });
 
-
-  document.getElementById('vibeInput').addEventListener('keydown', function(e){ if(e.key==='Enter') generateBoard(); });
-
-  function setVibe(text) {
-    document.getElementById('vibeInput').value = text;
-    document.getElementById('vibeInput').focus();
+  // KEY SCREEN
+  function showKeyScreen(){
+    var ks = document.getElementById('keyScreen');
+    ks.style.display = 'flex';
+    ks.style.opacity = '1';
+    setTimeout(function(){ document.getElementById('keyInput').focus(); }, 100);
   }
 
-  async function generateBoard() {
-    
+  function saveKey(){
+    var key = document.getElementById('keyInput').value.trim();
+    if (!key.startsWith('sk-ant-')){
+      document.getElementById('keyErr').style.display = 'block';
+      return;
+    }
+    localStorage.setItem('muse_key', key);
+    API_KEY = key;
+    var ks = document.getElementById('keyScreen');
+    ks.style.transition = 'opacity 0.5s';
+    ks.style.opacity = '0';
+    setTimeout(function(){ ks.style.display = 'none'; document.getElementById('vibeInput').focus(); }, 500);
+  }
+
+  document.getElementById('keyInput').addEventListener('keydown', function(e){ if(e.key==='Enter') saveKey(); });
+  document.getElementById('vibeInput').addEventListener('keydown', function(e){ if(e.key==='Enter') generateBoard(); });
+
+  function setVibe(text){ document.getElementById('vibeInput').value = text; document.getElementById('vibeInput').focus(); }
+
+  async function generateBoard(){
+    if (!API_KEY){ showKeyScreen(); return; }
     var vibe = document.getElementById('vibeInput').value.trim();
-    if (!vibe) { document.getElementById('vibeInput').focus(); return; }
+    if (!vibe){ document.getElementById('vibeInput').focus(); return; }
 
     var btn = document.getElementById('generateBtn');
     var loading = document.getElementById('loading');
@@ -209,7 +235,7 @@
     moodboard.classList.remove('active');
     moodboard.innerHTML = '';
 
-    var prompt = 'You are a high-fashion AI stylist and creative director. Based on the vibe/occasion provided, generate a complete fashion mood board in JSON only. No markdown, no preamble, just raw JSON.\n\nVibe: "' + vibe + '"\n\nReturn EXACTLY this JSON structure:\n{\n  "boardTitle": "2-4 word poetic board title",\n  "poem": "A short evocative 3-4 sentence poetic description of this aesthetic in editorial tone.",\n  "persona": "2-5 word style persona name",\n  "personaDesc": "2-3 sentences describing this style personality.",\n  "palette": [\n    { "name": "Color Name", "hex": "#HEXCODE" },\n    { "name": "Color Name", "hex": "#HEXCODE" },\n    { "name": "Color Name", "hex": "#HEXCODE" },\n    { "name": "Color Name", "hex": "#HEXCODE" },\n    { "name": "Color Name", "hex": "#HEXCODE" }\n  ],\n  "keywords": ["kw1","kw2","kw3","kw4","kw5","kw6","kw7","kw8"],\n  "outfits": [\n    { "title": "Look Name", "desc": "2-sentence outfit description with specific pieces and styling tips." },\n    { "title": "Look Name", "desc": "2-sentence outfit description." },\n    { "title": "Look Name", "desc": "2-sentence outfit description." }\n  ],\n  "inspoQuote": "A short memorable fashion quote or mantra."\n}';
+    var prompt = 'You are a high-fashion AI stylist. Generate a fashion mood board in JSON only. No markdown, no preamble.\n\nVibe: "' + vibe + '"\n\nReturn EXACTLY:\n{\n  "boardTitle": "2-4 word poetic title",\n  "poem": "3-4 sentence editorial aesthetic description",\n  "persona": "2-5 word style persona",\n  "personaDesc": "2-3 sentences about this style personality",\n  "palette": [{"name":"Name","hex":"#HEX"},{"name":"Name","hex":"#HEX"},{"name":"Name","hex":"#HEX"},{"name":"Name","hex":"#HEX"},{"name":"Name","hex":"#HEX"}],\n  "keywords": ["kw1","kw2","kw3","kw4","kw5","kw6","kw7","kw8"],\n  "outfits": [{"title":"Look","desc":"2 sentences."},{"title":"Look","desc":"2 sentences."},{"title":"Look","desc":"2 sentences."}],\n  "inspoQuote": "Short fashion quote"\n}';
 
     try {
       var response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -220,77 +246,62 @@
           'anthropic-version': '2023-06-01',
           'anthropic-dangerous-direct-browser-access': 'true'
         },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
-          max_tokens: 1000,
-          messages: [{ role: 'user', content: prompt }]
-        })
+        body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1500, messages: [{ role: 'user', content: prompt }] })
       });
 
-      if (!response.ok) {
-        var errData = await response.json().catch(function(){ return {}; });
-        throw new Error(errData.error ? errData.error.message : ('HTTP ' + response.status));
+      if (!response.ok){
+        var e = await response.json().catch(function(){ return {}; });
+        // If auth error, clear key and show screen again
+        if (response.status === 401){
+          localStorage.removeItem('muse_key');
+          API_KEY = null;
+          throw new Error('Invalid key — please re-enter your key');
+        }
+        throw new Error(e.error ? e.error.message : ('HTTP ' + response.status));
       }
 
       var data = await response.json();
-      var raw = data.content.map(function(i){ return i.text || ''; }).join('');
-      // Robustly extract JSON object from response
-      var jsonMatch = raw.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) throw new Error('No JSON found in response');
-      var board = JSON.parse(jsonMatch[0]);
-      renderBoard(board);
+      var raw = data.content.map(function(i){ return i.text||''; }).join('');
+      var match = raw.match(/\{[\s\S]*\}/);
+      if (!match) throw new Error('Could not read response');
+      renderBoard(JSON.parse(match[0]));
     } catch(err) {
-      moodboard.innerHTML = '<p style="text-align:center;color:#c0392b;font-family:\'Josefin Sans\',sans-serif;font-size:12px;padding:40px;letter-spacing:.05em;">ERROR: ' + (err.message || 'Unknown error') + '</p>';
+      moodboard.innerHTML = '<p style="text-align:center;color:#c0392b;font-family:\'Josefin Sans\',sans-serif;font-size:12px;padding:40px;letter-spacing:.05em;">ERROR: ' + (err.message||'Something went wrong') + '</p>';
       moodboard.classList.add('active');
+      if (!API_KEY) setTimeout(showKeyScreen, 1500);
     } finally {
       loading.classList.remove('active');
       btn.disabled = false;
     }
   }
 
-  function renderBoard(b) {
-    var now = new Date();
-    var dateStr = now.toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' }).toUpperCase();
-
-    var swatchesHtml = b.palette.map(function(c){
-      return '<div class="swatch-wrap"><div class="swatch" style="background:' + c.hex + '" title="' + c.hex + '"></div><div class="swatch-name">' + c.name + '</div></div>';
-    }).join('');
-
-    var keywordsHtml = b.keywords.map(function(k, i){
-      return '<div class="keyword-tag" style="animation-delay:' + (i * 0.05) + 's">' + k + '</div>';
-    }).join('');
-
-    var outfitsHtml = b.outfits.map(function(o, i){
-      return '<div class="outfit-item"><div class="outfit-num">0' + (i+1) + '</div><div class="outfit-title">' + o.title + '</div><div class="outfit-desc">' + o.desc + '</div></div>';
-    }).join('');
-
-    var moodboard = document.getElementById('moodboard');
-    moodboard.innerHTML =
-      '<div class="mb-header">' +
-        '<span class="mb-issue">MUSE Editorial</span>' +
-        '<span class="mb-title">' + b.boardTitle + '</span>' +
-        '<span class="mb-date">' + dateStr + '</span>' +
-      '</div>' +
-      '<div class="mb-grid">' +
-        '<div class="card-poem"><span class="poem-label">The Aesthetic</span><div class="poem-text">' + b.poem + '</div></div>' +
-        '<div class="card-palette"><span class="card-label">Colour Palette</span><div class="swatches">' + swatchesHtml + '</div></div>' +
-        '<div class="card-dna"><div><span class="card-label">Your Style Persona</span><div class="dna-persona">' + b.persona + '</div></div><div class="dna-desc">' + b.personaDesc + '</div></div>' +
-        '<div class="card-keywords"><span class="card-label">Aesthetic Keywords</span><div class="keywords-wrap">' + keywordsHtml + '</div></div>' +
-        '<div class="card-outfit">' + outfitsHtml + '</div>' +
-        '<div class="inspo-line"><div class="inspo-quote">"' + b.inspoQuote + '"</div></div>' +
-      '</div>' +
+  function renderBoard(b){
+    var dateStr = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}).toUpperCase();
+    var swatchesHtml = b.palette.map(function(c){ return '<div class="swatch-wrap"><div class="swatch" style="background:'+c.hex+'" title="'+c.hex+'"></div><div class="swatch-name">'+c.name+'</div></div>'; }).join('');
+    var keywordsHtml = b.keywords.map(function(k,i){ return '<div class="keyword-tag" style="animation-delay:'+(i*.05)+'s">'+k+'</div>'; }).join('');
+    var outfitsHtml = b.outfits.map(function(o,i){ return '<div class="outfit-item"><div class="outfit-num">0'+(i+1)+'</div><div class="outfit-title">'+o.title+'</div><div class="outfit-desc">'+o.desc+'</div></div>'; }).join('');
+    var mb = document.getElementById('moodboard');
+    mb.innerHTML =
+      '<div class="mb-header"><span class="mb-issue">MUSE Editorial</span><span class="mb-title">'+b.boardTitle+'</span><span class="mb-date">'+dateStr+'</span></div>'+
+      '<div class="mb-grid">'+
+        '<div class="card-poem"><span class="poem-label">The Aesthetic</span><div class="poem-text">'+b.poem+'</div></div>'+
+        '<div class="card-palette"><span class="card-label">Colour Palette</span><div class="swatches">'+swatchesHtml+'</div></div>'+
+        '<div class="card-dna"><div><span class="card-label">Your Style Persona</span><div class="dna-persona">'+b.persona+'</div></div><div class="dna-desc">'+b.personaDesc+'</div></div>'+
+        '<div class="card-keywords"><span class="card-label">Aesthetic Keywords</span><div class="keywords-wrap">'+keywordsHtml+'</div></div>'+
+        '<div class="card-outfit">'+outfitsHtml+'</div>'+
+        '<div class="inspo-line"><div class="inspo-quote">"'+b.inspoQuote+'"</div></div>'+
+      '</div>'+
       '<button class="reset-btn" onclick="resetBoard()">← Create Another Board</button>';
-
-    moodboard.classList.add('active');
-    moodboard.scrollIntoView({ behavior:'smooth', block:'start' });
+    mb.classList.add('active');
+    mb.scrollIntoView({behavior:'smooth',block:'start'});
   }
 
-  function resetBoard() {
+  function resetBoard(){
     var mb = document.getElementById('moodboard');
     mb.classList.remove('active');
     mb.innerHTML = '';
     document.getElementById('vibeInput').value = '';
-    window.scrollTo({ top:0, behavior:'smooth' });
+    window.scrollTo({top:0,behavior:'smooth'});
   }
 </script>
 </body>
