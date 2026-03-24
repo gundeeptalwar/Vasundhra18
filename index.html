@@ -125,8 +125,8 @@
 <!-- BIRTHDAY SPLASH -->
 <div id="splash">
   <div class="s-pre">A gift, just for you</div>
-  <div class="s-num">23000</div>
-  <div class="s-days">minutes until your birthday</div>
+  <div class="s-num">18</div>
+  <div class="s-days">days until your birthday</div>
   <div class="s-name">Vasundhra</div>
   <div class="s-rule"></div>
   <div class="s-msg">Your personal AI fashion editor is here — made with love, just for you. 🎀</div>
@@ -312,31 +312,15 @@
       outfitsHtml += '<div class="outfit-item"><div class="outfit-num">0' + (oi+1) + '</div><div class="outfit-title">' + b.outfits[oi].title + '</div><div class="outfit-desc">' + b.outfits[oi].desc + '</div></div>';
     }
 
-    // Fetch fashion images from Pexels
-    var imgHtml = '<div class="img-loading">Loading images…</div>';
-    var mb2 = document.getElementById('moodboard');
-    (async function() {
-      try {
-        var query = encodeURIComponent(b.keywords.slice(0,3).join(' ') + ' fashion outfit');
-        var pRes = await fetch('https://api.pexels.com/v1/search?query=' + query + '&per_page=3&orientation=portrait', {
-          headers: { 'Authorization': '563492ad6f91700001000001b8e6c0f2e4b74a3cb1e2f4e8d9a7c3b5' }
-        });
-        var pData = await pRes.json();
-        var imgs = '';
-        if (pData.photos && pData.photos.length > 0) {
-          for (var pi = 0; pi < pData.photos.length; pi++) {
-            var ph = pData.photos[pi];
-            imgs += '<div class="img-wrap"><img src="' + ph.src.medium + '" alt="' + ph.alt + '" loading="lazy"/><div class="img-label">' + b.keywords[pi] + '</div></div>';
-          }
-        }
-        var imgSection = document.querySelector('.images-grid');
-        if (imgSection) imgSection.innerHTML = imgs || '<p style="color:var(--taupe);font-size:12px;">No images found</p>';
-      } catch(e) {
-        var imgSection = document.querySelector('.images-grid');
-        if (imgSection) imgSection.innerHTML = '';
-      }
-    })();
-    imgHtml = '';
+    // Fashion image seeds - beautiful portrait photos
+    var seeds = [10, 64, 338, 433, 520, 582, 669, 701, 756, 819, 837, 903, 1011, 1036, 1052];
+    var imgHtml = '';
+    for (var ii = 0; ii < 3; ii++) {
+      var seed = seeds[Math.floor(Math.random() * seeds.length)];
+      var src = 'https://picsum.photos/seed/' + (seed + ii) + '/400/600';
+      var kw = b.keywords[ii] || '';
+      imgHtml += '<div class="img-wrap"><img src="' + src + '" alt="' + kw + '" loading="lazy"/><div class="img-label">' + kw + '</div></div>';
+    }
 
     var mb = document.getElementById('moodboard');
     mb.innerHTML =
