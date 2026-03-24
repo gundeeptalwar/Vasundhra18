@@ -312,15 +312,24 @@
       outfitsHtml += '<div class="outfit-item"><div class="outfit-num">0' + (oi+1) + '</div><div class="outfit-title">' + b.outfits[oi].title + '</div><div class="outfit-desc">' + b.outfits[oi].desc + '</div></div>';
     }
 
-    // Fashion image seeds - beautiful portrait photos
-    var seeds = [10, 64, 338, 433, 520, 582, 669, 701, 756, 819, 837, 903, 1011, 1036, 1052];
+    // Fetch real fashion images from Pexels
     var imgHtml = '';
-    for (var ii = 0; ii < 3; ii++) {
-      var seed = seeds[Math.floor(Math.random() * seeds.length)];
-      var src = 'https://picsum.photos/seed/' + (seed + ii) + '/400/600';
-      var kw = b.keywords[ii] || '';
-      imgHtml += '<div class="img-wrap"><img src="' + src + '" alt="' + kw + '" loading="lazy"/><div class="img-label">' + kw + '</div></div>';
-    }
+    var pexelsKey = 'YYdhlDCguGpEncOnvSb2sZtPCQ00xuordm1MqJhmOE1kHnbEnZzIGM7Z';
+    var pQuery = encodeURIComponent(b.keywords.slice(0,3).join(' ') + ' fashion woman outfit');
+    fetch('https://api.pexels.com/v1/search?query=' + pQuery + '&per_page=3&orientation=portrait', {
+      headers: { 'Authorization': pexelsKey }
+    }).then(function(r){ return r.json(); }).then(function(pData){
+      var imgs = '';
+      if (pData.photos && pData.photos.length > 0) {
+        for (var pi = 0; pi < pData.photos.length; pi++) {
+          var ph = pData.photos[pi];
+          var lbl = b.keywords[pi] || '';
+          imgs += '<div class="img-wrap"><img src="' + ph.src.medium + '" alt="' + lbl + '" loading="lazy"/><div class="img-label">' + lbl + '</div></div>';
+        }
+      }
+      var grid = document.querySelector('.images-grid');
+      if (grid && imgs) grid.innerHTML = imgs;
+    }).catch(function(){});
 
     var mb = document.getElementById('moodboard');
     mb.innerHTML =
