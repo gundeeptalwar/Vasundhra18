@@ -315,7 +315,7 @@
     // Fetch real fashion images from Pexels
     var imgHtml = '';
     var pexelsKey = 'YYdhlDCguGpEncOnvSb2sZtPCQ00xuordm1MqJhmOE1kHnbEnZzIGM7Z';
-    var pQuery = encodeURIComponent(b.keywords.slice(0,3).join(' ') + ' fashion woman outfit');
+    var pQuery = encodeURIComponent('woman fashion outfit ' + b.boardTitle + ' style clothing');
     fetch('https://api.pexels.com/v1/search?query=' + pQuery + '&per_page=3&orientation=portrait', {
       headers: { 'Authorization': pexelsKey }
     }).then(function(r){ return r.json(); }).then(function(pData){
