@@ -125,7 +125,7 @@
 <!-- BIRTHDAY SPLASH -->
 <div id="splash">
   <div class="s-pre">A gift, just for you</div>
-  <div class="s-num">15</div>
+  <div class="s-num">16</div>
   <div class="s-days">days until your birthday</div>
   <div class="s-name">Vasundhra</div>
   <div class="s-rule"></div>
@@ -181,84 +181,72 @@
 </footer>
 
 <script>
-  var API_KEY = null;
-  try {
-    var stored = localStorage.getItem('muse_key');
-    if (stored && stored.length > 20) API_KEY = stored;
-    else localStorage.removeItem('muse_key');
-  } catch(e){}
+  // Always clear any old saved key to force fresh entry
+  try { localStorage.removeItem('muse_key'); } catch(e){}
 
-  // SPLASH
-  document.getElementById('splash').addEventListener('click', function(){
-    var el = this;
-    el.style.transition = 'opacity 0.8s ease';
-    el.style.opacity = '0';
-    setTimeout(function(){
-      el.style.display = 'none';
-      if (!API_KEY) showKeyScreen();
-    }, 800);
+  var API_KEY = null;
+
+  // Show key screen immediately on page load
+  window.addEventListener('load', function() {
+    // Hide splash, show key screen right away
+    var splash = document.getElementById('splash');
+    var keyScreen = document.getElementById('keyScreen');
+    if (splash) splash.style.display = 'none';
+    if (keyScreen) {
+      keyScreen.style.display = 'flex';
+      keyScreen.style.opacity = '1';
+      setTimeout(function(){
+        var inp = document.getElementById('keyInput');
+        if (inp) inp.focus();
+      }, 100);
+    }
   });
 
-  // If no key saved, show key screen right away (after splash dismissed)
-  if (!API_KEY) {
-    // Show key screen after splash animation
-    setTimeout(function(){
-      var splash = document.getElementById('splash');
-      if (splash) {
-        splash.style.transition = 'opacity 0.8s ease';
-        splash.style.opacity = '0';
-        setTimeout(function(){ splash.style.display = 'none'; showKeyScreen(); }, 800);
-      }
-    }, 2500);
-  }
-
-  // KEY SCREEN
-  function showKeyScreen(){
-    var ks = document.getElementById('keyScreen');
-    ks.style.display = 'flex';
-    ks.style.opacity = '1';
-    setTimeout(function(){ document.getElementById('keyInput').focus(); }, 100);
-  }
-
-  function saveKey(){
-    var key = document.getElementById('keyInput').value.trim();
-    if (key.length < 20){
-      document.getElementById('keyErr').style.display = 'block';
+  function saveKey() {
+    var inp = document.getElementById('keyInput');
+    var key = inp ? inp.value.trim() : '';
+    var errEl = document.getElementById('keyErr');
+    if (errEl) errEl.style.display = 'none';
+    if (!key || key.length < 20) {
+      if (errEl) errEl.style.display = 'block';
       return;
     }
     API_KEY = key;
-    try { localStorage.setItem('muse_key', key); } catch(e){}
     var ks = document.getElementById('keyScreen');
-    ks.style.transition = 'opacity 0.4s';
-    ks.style.opacity = '0';
-    setTimeout(function(){
-      ks.style.display = 'none';
-      document.getElementById('vibeInput').focus();
-    }, 400);
+    if (ks) {
+      ks.style.transition = 'opacity 0.4s';
+      ks.style.opacity = '0';
+      setTimeout(function(){ 
+        ks.style.display = 'none';
+        var vi = document.getElementById('vibeInput');
+        if (vi) vi.focus();
+      }, 400);
+    }
   }
 
-  document.getElementById('keyInput').addEventListener('keydown', function(e){ if(e.key==='Enter') saveKey(); });
-  document.getElementById('vibeInput').addEventListener('keydown', function(e){ if(e.key==='Enter') generateBoard(); });
+  document.addEventListener('DOMContentLoaded', function() {
+    var inp = document.getElementById('keyInput');
+    if (inp) inp.addEventListener('keydown', function(e){ if(e.key==='Enter') saveKey(); });
+    var vi = document.getElementById('vibeInput');
+    if (vi) vi.addEventListener('keydown', function(e){ if(e.key==='Enter') generateBoard(); });
+  });
 
-  function setVibe(text){ document.getElementById('vibeInput').value = text; document.getElementById('vibeInput').focus(); }
+  function setVibe(text) {
+    var vi = document.getElementById('vibeInput');
+    if (vi) { vi.value = text; vi.focus(); }
+  }
 
-  async function generateBoard(){
-    if (!API_KEY){ showKeyScreen(); return; }
+  async function generateBoard() {
+    if (!API_KEY) {
+      var ks = document.getElementById('keyScreen');
+      if (ks) { ks.style.display = 'flex'; ks.style.opacity = '1'; }
+      return;
+    }
     var vibe = document.getElementById('vibeInput').value.trim();
-    if (!vibe){ document.getElementById('vibeInput').focus(); return; }
+    if (!vibe) { document.getElementById('vibeInput').focus(); return; }
 
     var btn = document.getElementById('generateBtn');
     var loading = document.getElementById('loading');
-    // Build fashion images from keywords
-    var imgKeywords = b.keywords.slice(0, 3);
-    var imgHtml = '';
-    for (var ii = 0; ii < imgKeywords.length; ii++) {
-      var kw = imgKeywords[ii];
-      var q = encodeURIComponent(kw + ' fashion style');
-      var src = 'https://source.unsplash.com/featured/400x600/?' + q + '&sig=' + ii;
-      imgHtml += '<div class="img-wrap"><img src="' + src + '" alt="' + kw + '" loading="lazy"/><div class="img-label">' + kw + '</div></div>';
-    }
-
     var moodboard = document.getElementById('moodboard');
 
     btn.disabled = true;
@@ -266,7 +254,7 @@
     moodboard.classList.remove('active');
     moodboard.innerHTML = '';
 
-    var prompt = 'You are a high-fashion AI stylist. Generate a fashion mood board in JSON only. No markdown, no preamble.\n\nVibe: "' + vibe + '"\n\nReturn EXACTLY:\n{\n  "boardTitle": "2-4 word poetic title",\n  "poem": "3-4 sentence editorial aesthetic description",\n  "persona": "2-5 word style persona",\n  "personaDesc": "2-3 sentences about this style personality",\n  "palette": [{"name":"Name","hex":"#HEX"},{"name":"Name","hex":"#HEX"},{"name":"Name","hex":"#HEX"},{"name":"Name","hex":"#HEX"},{"name":"Name","hex":"#HEX"}],\n  "keywords": ["kw1","kw2","kw3","kw4","kw5","kw6","kw7","kw8"],\n  "outfits": [{"title":"Look","desc":"2 sentences."},{"title":"Look","desc":"2 sentences."},{"title":"Look","desc":"2 sentences."}],\n  "inspoQuote": "Short fashion quote"\n}';
+    var prompt = 'You are a high-fashion AI stylist. Based on the vibe provided, generate a fashion mood board in JSON only. No markdown, no preamble, just raw JSON.\n\nVibe: "' + vibe + '"\n\nReturn EXACTLY this JSON:\n{\n  "boardTitle": "2-4 word poetic title",\n  "poem": "3-4 sentence poetic aesthetic description",\n  "persona": "2-5 word style persona name",\n  "personaDesc": "2-3 sentences about this style personality",\n  "palette": [{"name":"Color","hex":"#HEX"},{"name":"Color","hex":"#HEX"},{"name":"Color","hex":"#HEX"},{"name":"Color","hex":"#HEX"},{"name":"Color","hex":"#HEX"}],\n  "keywords": ["kw1","kw2","kw3","kw4","kw5","kw6","kw7","kw8"],\n  "outfits": [{"title":"Look","desc":"2 sentences."},{"title":"Look","desc":"2 sentences."},{"title":"Look","desc":"2 sentences."}],\n  "inspoQuote": "Short fashion quote"\n}';
 
     try {
       var response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -277,62 +265,84 @@
           'anthropic-version': '2023-06-01',
           'anthropic-dangerous-direct-browser-access': 'true'
         },
-        body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1500, messages: [{ role: 'user', content: prompt }] })
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 1200,
+          messages: [{ role: 'user', content: prompt }]
+        })
       });
 
-      if (!response.ok){
+      if (!response.ok) {
         var e = await response.json().catch(function(){ return {}; });
-        // If auth error, clear key and show screen again
-        if (response.status === 401){
-          localStorage.removeItem('muse_key');
-          API_KEY = null;
-          throw new Error('Invalid key — please re-enter your key');
-        }
-        throw new Error(e.error ? e.error.message : ('HTTP ' + response.status));
+        throw new Error(e.error ? e.error.message : 'HTTP ' + response.status);
       }
 
       var data = await response.json();
-      var raw = data.content.map(function(i){ return i.text||''; }).join('');
+      var raw = data.content.map(function(i){ return i.text || ''; }).join('');
       var match = raw.match(/\{[\s\S]*\}/);
-      if (!match) throw new Error('Could not read response');
-      renderBoard(JSON.parse(match[0]));
+      if (!match) throw new Error('No JSON in response');
+      var board = JSON.parse(match[0]);
+      renderBoard(board);
     } catch(err) {
-      moodboard.innerHTML = '<p style="text-align:center;color:#c0392b;font-family:\'Josefin Sans\',sans-serif;font-size:12px;padding:40px;letter-spacing:.05em;">ERROR: ' + (err.message||'Something went wrong') + '</p>';
+      moodboard.innerHTML = '<p style="text-align:center;color:#c0392b;font-family:sans-serif;font-size:13px;padding:40px;">Error: ' + (err.message || 'Something went wrong') + '</p>';
       moodboard.classList.add('active');
-      if (!API_KEY) setTimeout(showKeyScreen, 1500);
     } finally {
       loading.classList.remove('active');
       btn.disabled = false;
     }
   }
 
-  function renderBoard(b){
-    var dateStr = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}).toUpperCase();
-    var swatchesHtml = b.palette.map(function(c){ return '<div class="swatch-wrap"><div class="swatch" style="background:'+c.hex+'" title="'+c.hex+'"></div><div class="swatch-name">'+c.name+'</div></div>'; }).join('');
-    var keywordsHtml = b.keywords.map(function(k,i){ return '<div class="keyword-tag" style="animation-delay:'+(i*.05)+'s">'+k+'</div>'; }).join('');
-    var outfitsHtml = b.outfits.map(function(o,i){ return '<div class="outfit-item"><div class="outfit-num">0'+(i+1)+'</div><div class="outfit-title">'+o.title+'</div><div class="outfit-desc">'+o.desc+'</div></div>'; }).join('');
+  function renderBoard(b) {
+    var now = new Date();
+    var dateStr = now.toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'}).toUpperCase();
+
+    var swatchesHtml = '';
+    for (var si = 0; si < b.palette.length; si++) {
+      var c = b.palette[si];
+      swatchesHtml += '<div class="swatch-wrap"><div class="swatch" style="background:' + c.hex + '" title="' + c.hex + '"></div><div class="swatch-name">' + c.name + '</div></div>';
+    }
+
+    var keywordsHtml = '';
+    for (var ki = 0; ki < b.keywords.length; ki++) {
+      keywordsHtml += '<div class="keyword-tag">' + b.keywords[ki] + '</div>';
+    }
+
+    var outfitsHtml = '';
+    for (var oi = 0; oi < b.outfits.length; oi++) {
+      outfitsHtml += '<div class="outfit-item"><div class="outfit-num">0' + (oi+1) + '</div><div class="outfit-title">' + b.outfits[oi].title + '</div><div class="outfit-desc">' + b.outfits[oi].desc + '</div></div>';
+    }
+
+    var imgHtml = '';
+    for (var ii = 0; ii < 3 && ii < b.keywords.length; ii++) {
+      var kw = b.keywords[ii];
+      var src = 'https://source.unsplash.com/featured/400x600/?' + encodeURIComponent(kw + ' fashion') + '&sig=' + ii;
+      imgHtml += '<div class="img-wrap"><img src="' + src + '" alt="' + kw + '" loading="lazy"/><div class="img-label">' + kw + '</div></div>';
+    }
+
     var mb = document.getElementById('moodboard');
     mb.innerHTML =
-      '<div class="mb-header"><span class="mb-issue">MUSE Editorial</span><span class="mb-title">'+b.boardTitle+'</span><span class="mb-date">'+dateStr+'</span></div>'+
-      '<div class="mb-grid">'+
-        '<div class="card-poem"><span class="poem-label">The Aesthetic</span><div class="poem-text">'+b.poem+'</div></div>'+
-        '<div class="card-palette"><span class="card-label">Colour Palette</span><div class="swatches">'+swatchesHtml+'</div></div>'+
-        '<div class="card-dna"><div><span class="card-label">Your Style Persona</span><div class="dna-persona">'+b.persona+'</div></div><div class="dna-desc">'+b.personaDesc+'</div></div>'+
-        '<div class="card-keywords"><span class="card-label">Aesthetic Keywords</span><div class="keywords-wrap">'+keywordsHtml+'</div></div>'+
-        '<div class="card-outfit">'+outfitsHtml+'</div>'+
-        '<div class="inspo-line"><div class="inspo-quote">"'+b.inspoQuote+'"</div></div>'+
-      '</div>'+
+      '<div class="mb-header"><span class="mb-issue">MUSE Editorial</span><span class="mb-title">' + b.boardTitle + '</span><span class="mb-date">' + dateStr + '</span></div>' +
+      '<div class="mb-grid">' +
+        '<div class="card-poem"><span class="poem-label">The Aesthetic</span><div class="poem-text">' + b.poem + '</div></div>' +
+        '<div class="card-palette"><span class="card-label">Colour Palette</span><div class="swatches">' + swatchesHtml + '</div></div>' +
+        '<div class="card-dna"><div><span class="card-label">Your Style Persona</span><div class="dna-persona">' + b.persona + '</div></div><div class="dna-desc">' + b.personaDesc + '</div></div>' +
+        '<div class="card-keywords"><span class="card-label">Aesthetic Keywords</span><div class="keywords-wrap">' + keywordsHtml + '</div></div>' +
+        '<div class="card-outfit">' + outfitsHtml + '</div>' +
+        '<div class="card-images"><span class="card-label">Fashion Inspiration</span><div class="images-grid">' + imgHtml + '</div></div>' +
+        '<div class="inspo-line"><div class="inspo-quote">"' + b.inspoQuote + '"</div></div>' +
+      '</div>' +
       '<button class="reset-btn" onclick="resetBoard()">← Create Another Board</button>';
+
     mb.classList.add('active');
-    mb.scrollIntoView({behavior:'smooth',block:'start'});
+    mb.scrollIntoView({ behavior:'smooth', block:'start' });
   }
 
-  function resetBoard(){
+  function resetBoard() {
     var mb = document.getElementById('moodboard');
     mb.classList.remove('active');
     mb.innerHTML = '';
     document.getElementById('vibeInput').value = '';
-    window.scrollTo({top:0,behavior:'smooth'});
+    window.scrollTo({ top:0, behavior:'smooth' });
   }
 </script>
 </body>
