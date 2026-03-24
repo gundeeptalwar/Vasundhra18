@@ -182,7 +182,11 @@
 
 <script>
   var API_KEY = null;
-  try { API_KEY = localStorage.getItem('muse_key') || null; } catch(e){}
+  try {
+    var stored = localStorage.getItem('muse_key');
+    if (stored && stored.length > 20) API_KEY = stored;
+    else localStorage.removeItem('muse_key');
+  } catch(e){}
 
   // SPLASH
   document.getElementById('splash').addEventListener('click', function(){
@@ -194,6 +198,19 @@
       if (!API_KEY) showKeyScreen();
     }, 800);
   });
+
+  // If no key saved, show key screen right away (after splash dismissed)
+  if (!API_KEY) {
+    // Show key screen after splash animation
+    setTimeout(function(){
+      var splash = document.getElementById('splash');
+      if (splash) {
+        splash.style.transition = 'opacity 0.8s ease';
+        splash.style.opacity = '0';
+        setTimeout(function(){ splash.style.display = 'none'; showKeyScreen(); }, 800);
+      }
+    }, 2500);
+  }
 
   // KEY SCREEN
   function showKeyScreen(){
@@ -212,7 +229,12 @@
     API_KEY = key;
     try { localStorage.setItem('muse_key', key); } catch(e){}
     var ks = document.getElementById('keyScreen');
-    ks.style.display = 'none';
+    ks.style.transition = 'opacity 0.4s';
+    ks.style.opacity = '0';
+    setTimeout(function(){
+      ks.style.display = 'none';
+      document.getElementById('vibeInput').focus();
+    }, 400);
   }
 
   document.getElementById('keyInput').addEventListener('keydown', function(e){ if(e.key==='Enter') saveKey(); });
